@@ -32,70 +32,69 @@
 #endregion Copyright (c) 2006, Nate Zobrist
 
 using System;
-using System.Collections.Generic;
+using System.Globalization;
+using System.Web;
+using System.Xml;
 
-using Netlicious.Exceptions;
-
-using NUnit.Framework;
-
-namespace Netlicious.Tests
+namespace Delicious
 {
-	[TestFixture]
-	public class TagTests : TestBase
+	internal static class Utilities
 	{
-		[Test]
-		public void ObjectEquality ()
+		internal static string AddParameter (string baseUrl, string parameter, string value)
 		{
-			Tag t1 = new Tag();
-			t1.Name = this.GetRandomUrl();
-			t1.Count = 42;
+			value = HttpUtility.UrlEncode (value);
 
-			Tag t2 = new Tag (t1.Name, t1.Count);
-
-			Assert.IsTrue (t1 == t2, "(t1 == t2) should be true");
-			Assert.IsFalse (t1 != t2, "(t1 != t2) should be false");
-			Assert.IsTrue (t1.Equals (t2), "t1.Equals(t2) should be true");
-
-			Assert.IsTrue (t1.ReferenceEquals (t1), "t1.ReferenceEquals(t1) should be true");
-			Assert.IsFalse (t1.ReferenceEquals (t2), "t1.ReferenceEquals(t2) should be false");
-		}
-
-
-		[Test]
-		public void Get ()
-		{
-			string tag = this.GetRandomString();
-			string url = this.AddNewUrlToDelicious (tag);
-
-			List<Tag> tags = Tag.Get();
-
-			bool found = false;
-			foreach (Tag t in tags)
+			// insert the '?' if needed
+			int qLocation = baseUrl.LastIndexOf ('?');
+			if (qLocation < 0)
 			{
-				if (t.Name == tag)
-				{
-					found = true;
-					break;
-				}
+				baseUrl += "?";
+				qLocation = baseUrl.Length - 1;
 			}
 
-			Assert.IsTrue (found, "The tag '" + tag + "' was not sucessfully returned.");
+			if (baseUrl.Length > qLocation + 1)
+				baseUrl += "&";
+	
+			// del.icio.us seems to always add a trailing slash to added urls
+			if (parameter == Constants.UrlParameter.Url && !value.EndsWith (HttpUtility.UrlEncode ("/")))
+				value += HttpUtility.UrlEncode ("/");
+
+			baseUrl += parameter + "=" + value;
+			return baseUrl;
 		}
 
 
-		[Test]
-		public void Rename ()
+		internal static DateTime ConvertFromDeliciousTime (string time)
 		{
-			string tag = this.GetRandomString();
-			string newTag = this.GetRandomString();
-			string url = this.AddNewUrlToDelicious (tag);
+			return DateTime.Parse (time, DateTimeFormatInfo.CurrentInfo, DateTimeStyles.AdjustToUniversal);
+		}
 
-			Post p = Post.GetPost (url);
-			Assert.IsTrue (p.Tag == tag, "The post was not sucessfully created with the tag");
 
-			Tag.Rename (tag, newTag);
-			p = Post.GetPost (url);
-			Assert.IsTrue (p.Tag == newTag, "The tag was NOT sucessfully renamed");
+		internal static string ConvertToDeliciousTime (DateTime time)
+		{
+			return time.ToUniversalTime().ToString();
+		}
+
+
+		internal static string ParseForResultCode (XmlElement xmlElement)
+		{
+			if (xmlElement == null)
+				return String.Empty;
+
+			if (xmlElement.Attributes.Count > 0)
+			{
+				XmlAttribute xmlAttribute = xmlElement.Attributes[ 0 ];
+				if (xmlAttribute == null)
+					return String.Empty;
+
+				return xmlAttribute.Value;
+			}
+			else if (xmlElement.InnerText.Length > 0)
+			{
+				return xmlElement.InnerText;
+			}
+
+			return xmlElement.Value;
 		}
 	}
 }

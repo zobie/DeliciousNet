@@ -32,61 +32,55 @@
 #endregion Copyright (c) 2006, Nate Zobrist
 
 using System;
-using System.Collections.Generic;
 
-using Netlicious.Exceptions;
+using Delicious.Exceptions;
 
 using NUnit.Framework;
 
-namespace Netlicious.Tests
+namespace Delicious.Tests
 {
-	public class TestBase
+	[TestFixture]
+	public class ConnectionTests : TestBase
 	{
-		protected static List<string> CleanupPostList = new List<string> ();
-
-		[TestFixtureSetUp]
-		public virtual void Init ()
+		[Test]
+		[Ignore ("TODO: not yet implemented")]
+		public void LastUpdateTime ()
 		{
-			// TODO: before these tests can be run you must supply a valid username/password combination
-			Connection.Username = @"";
-			Connection.Password = @"";
 		}
 
-
-		[TestFixtureTearDown]
-		public virtual void Dispose ()
+		[Test]
+		public void ConnectToDelicious ()
 		{
-			foreach (string url in CleanupPostList)
-				Post.Delete (url);
+			DateTime lastUpdated = Connection.LastUpdated ();
+			Assert.AreNotEqual (lastUpdated, DateTime.MinValue, "Delicious.LastUpdate() returned an invalid value");
 		}
 
-
-		System.Random rand = new System.Random ();
-		protected string GetRandomString ()
+		[Test]
+		public void NotAuthorizedException ()
 		{
-			return rand.Next ().ToString();
-		}
+			bool exceptionThrown = false;
+			string username = Connection.Username;
+			string password = Connection.Password;
 
-		protected string GetRandomUrl ()
-		{
-			return "http://www." + this.GetRandomString() + ".com/";
-		}
+			Connection.Username = "xyzzy";
+			Connection.Password = "plugh";
 
-		protected string AddNewUrlToDelicious ()
-		{
-			return this.AddNewUrlToDelicious (null);
-		}
+			try
+			{
+				DateTime lastUpdated = Connection.LastUpdated ();
+			}
+			catch (DeliciousNotAuthorizedException)
+			{
+				exceptionThrown = true;
+			}
+			finally
+			{
+				Connection.Username = username;
+				Connection.Password = password;
+			}
 
-		protected string AddNewUrlToDelicious (string tags)
-		{
-			string url = this.GetRandomUrl ();
-			string description = url;
-			if (tags == null || tags.Length == 0)
-				Post.Add (url, description);
-			else
-				Post.Add (url, description, null, tags, null);
-			CleanupPostList.Add (url);
-			return url;
+			if (!exceptionThrown)
+				Assert.Fail ("An invalid username/password combination should have thrown a DeliciousNotAuthorizedException.");
 		}
 	}
 }

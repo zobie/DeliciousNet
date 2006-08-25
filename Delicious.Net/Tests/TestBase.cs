@@ -32,69 +32,61 @@
 #endregion Copyright (c) 2006, Nate Zobrist
 
 using System;
-using System.Globalization;
-using System.Web;
-using System.Xml;
+using System.Collections.Generic;
 
-namespace Netlicious
+using Delicious.Exceptions;
+
+using NUnit.Framework;
+
+namespace Delicious.Tests
 {
-	internal static class Utilities
+	public class TestBase
 	{
-		internal static string AddParameter (string baseUrl, string parameter, string value)
+		protected static List<string> CleanupPostList = new List<string> ();
+
+		[TestFixtureSetUp]
+		public virtual void Init ()
 		{
-			value = HttpUtility.UrlEncode (value);
-
-			// insert the '?' if needed
-			int qLocation = baseUrl.LastIndexOf ('?');
-			if (qLocation < 0)
-			{
-				baseUrl += "?";
-				qLocation = baseUrl.Length - 1;
-			}
-
-			if (baseUrl.Length > qLocation + 1)
-				baseUrl += "&";
-	
-			// del.icio.us seems to always add a trailing slash to added urls
-			if (parameter == Constants.UrlParameter.Url && !value.EndsWith (HttpUtility.UrlEncode ("/")))
-				value += HttpUtility.UrlEncode ("/");
-
-			baseUrl += parameter + "=" + value;
-			return baseUrl;
+			// TODO: before these tests can be run you must supply a valid username/password combination
+			Connection.Username = @"";
+			Connection.Password = @"";
 		}
 
 
-		internal static DateTime ConvertFromDeliciousTime (string time)
+		[TestFixtureTearDown]
+		public virtual void Dispose ()
 		{
-			return DateTime.Parse (time, DateTimeFormatInfo.CurrentInfo, DateTimeStyles.AdjustToUniversal);
+			foreach (string url in CleanupPostList)
+				Post.Delete (url);
 		}
 
 
-		internal static string ConvertToDeliciousTime (DateTime time)
+		System.Random rand = new System.Random ();
+		protected string GetRandomString ()
 		{
-			return time.ToUniversalTime().ToString();
+			return rand.Next ().ToString();
 		}
 
-
-		internal static string ParseForResultCode (XmlElement xmlElement)
+		protected string GetRandomUrl ()
 		{
-			if (xmlElement == null)
-				return String.Empty;
+			return "http://www." + this.GetRandomString() + ".com/";
+		}
 
-			if (xmlElement.Attributes.Count > 0)
-			{
-				XmlAttribute xmlAttribute = xmlElement.Attributes[ 0 ];
-				if (xmlAttribute == null)
-					return String.Empty;
+		protected string AddNewUrlToDelicious ()
+		{
+			return this.AddNewUrlToDelicious (null);
+		}
 
-				return xmlAttribute.Value;
-			}
-			else if (xmlElement.InnerText.Length > 0)
-			{
-				return xmlElement.InnerText;
-			}
-
-			return xmlElement.Value;
+		protected string AddNewUrlToDelicious (string tags)
+		{
+			string url = this.GetRandomUrl ();
+			string description = url;
+			if (tags == null || tags.Length == 0)
+				Post.Add (url, description);
+			else
+				Post.Add (url, description, null, tags, null);
+			CleanupPostList.Add (url);
+			return url;
 		}
 	}
 }

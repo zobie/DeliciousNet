@@ -35,7 +35,7 @@ using System;
 using System.Collections.Generic;
 using System.Xml;
 
-namespace Netlicious
+namespace Delicious
 {
 	public class Post
 	{
@@ -208,7 +208,7 @@ namespace Netlicious
 			return !(post1 == post2);
 		}
 
-
+		
 		/// <summary>
 		/// Add a post to del.icio.us
 		/// </summary>

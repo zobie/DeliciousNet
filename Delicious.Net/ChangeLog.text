@@ -1,0 +1,8 @@
+﻿Version 1.1
+------------------------------------
+Change namespace from Netlicious to Delicious.  Rename dll to Delicious.Net.dll.
+
+
+Version 1.0
+------------------------------------
+Initial release

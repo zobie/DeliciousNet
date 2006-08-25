@@ -7,8 +7,8 @@
     <ProjectGuid>{3CBFBCBF-241B-415E-9CF2-1601A90C6DF4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Netlicious</RootNamespace>
-    <AssemblyName>Netlicious</AssemblyName>
+    <RootNamespace>Delicious</RootNamespace>
+    <AssemblyName>Delicious.Net</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,8 +38,8 @@
     <Compile Include="Bundle.cs" />
     <Compile Include="Connection.cs" />
     <Compile Include="Constants.cs" />
-    <Compile Include="Exceptions\NetliciousException.cs" />
-    <Compile Include="Exceptions\NetliciousNotAuthorizedException.cs" />
+    <Compile Include="Exceptions\DeliciousException.cs" />
+    <Compile Include="Exceptions\DeliciousNotAuthorizedException.cs" />
     <Compile Include="Post.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Tag.cs" />

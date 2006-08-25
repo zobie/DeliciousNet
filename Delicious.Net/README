@@ -1,0 +1,22 @@
+﻿Delicious.Net defines three different objects that can be used to interact with del.icio.us:
+	Delicious.Post
+	Delicious.Tag
+	Delicious.Bundle
+
+Before connecting to the del.icio.us servers you must set a username and password:
+	Delicious.Connection.Username = "SomeUser";
+	Delicious.Connection.Password = "MyPassword";
+
+
+Code Snips:
+	
+To retreive all posts and iterate through the list:
+	List<Delicious.Post> posts = Delicious.Post.Get();
+	foreach (Delicious.Post post in posts)
+	{ ... }
+
+To add a new post:
+	Delicious.Post.Add (url, description, extended, tags, date, replace, shared);
+
+To delete a post:
+	Delicious.Post.Delete (url);

@@ -32,55 +32,70 @@
 #endregion Copyright (c) 2006, Nate Zobrist
 
 using System;
+using System.Collections.Generic;
 
-using Netlicious.Exceptions;
+using Delicious.Exceptions;
 
 using NUnit.Framework;
 
-namespace Netlicious.Tests
+namespace Delicious.Tests
 {
 	[TestFixture]
-	public class ConnectionTests : TestBase
+	public class TagTests : TestBase
 	{
 		[Test]
-		[Ignore ("TODO: not yet implemented")]
-		public void LastUpdateTime ()
+		public void ObjectEquality ()
 		{
+			Tag t1 = new Tag();
+			t1.Name = this.GetRandomUrl();
+			t1.Count = 42;
+
+			Tag t2 = new Tag (t1.Name, t1.Count);
+
+			Assert.IsTrue (t1 == t2, "(t1 == t2) should be true");
+			Assert.IsFalse (t1 != t2, "(t1 != t2) should be false");
+			Assert.IsTrue (t1.Equals (t2), "t1.Equals(t2) should be true");
+
+			Assert.IsTrue (t1.ReferenceEquals (t1), "t1.ReferenceEquals(t1) should be true");
+			Assert.IsFalse (t1.ReferenceEquals (t2), "t1.ReferenceEquals(t2) should be false");
 		}
 
+
 		[Test]
-		public void ConnectToDelicious ()
+		public void Get ()
 		{
-			DateTime lastUpdated = Connection.LastUpdated ();
-			Assert.AreNotEqual (lastUpdated, DateTime.MinValue, "Delicious.LastUpdate() returned an invalid value");
+			string tag = this.GetRandomString();
+			string url = this.AddNewUrlToDelicious (tag);
+
+			List<Tag> tags = Tag.Get();
+
+			bool found = false;
+			foreach (Tag t in tags)
+			{
+				if (t.Name == tag)
+				{
+					found = true;
+					break;
+				}
+			}
+
+			Assert.IsTrue (found, "The tag '" + tag + "' was not sucessfully returned.");
 		}
 
+
 		[Test]
-		public void NotAuthorizedException ()
+		public void Rename ()
 		{
-			bool exceptionThrown = false;
-			string username = Connection.Username;
-			string password = Connection.Password;
+			string tag = this.GetRandomString();
+			string newTag = this.GetRandomString();
+			string url = this.AddNewUrlToDelicious (tag);
 
-			Connection.Username = "xyzzy";
-			Connection.Password = "plugh";
+			Post p = Post.GetPost (url);
+			Assert.IsTrue (p.Tag == tag, "The post was not sucessfully created with the tag");
 
-			try
-			{
-				DateTime lastUpdated = Connection.LastUpdated ();
-			}
-			catch (NetliciousNotAuthorizedException)
-			{
-				exceptionThrown = true;
-			}
-			finally
-			{
-				Connection.Username = username;
-				Connection.Password = password;
-			}
-
-			if (!exceptionThrown)
-				Assert.Fail ("An invalid username/password combination should have thrown a DeliciousNotAuthorizedException.");
+			Tag.Rename (tag, newTag);
+			p = Post.GetPost (url);
+			Assert.IsTrue (p.Tag == newTag, "The tag was NOT sucessfully renamed");
 		}
 	}
 }
