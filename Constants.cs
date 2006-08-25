@@ -36,7 +36,7 @@
 #endregion Copyright (c) 2006, Nate Zobrist
 
 
-namespace Netlicious
+namespace Delicious
 {
 	internal static class Constants
 	{

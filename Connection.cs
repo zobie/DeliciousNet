@@ -37,7 +37,7 @@ using System.Text;
 using System.Threading;
 using System.Xml;
 
-namespace Netlicious
+namespace Delicious
 {
 	public static class Connection
 	{
@@ -52,7 +52,7 @@ namespace Netlicious
 		/// <summary>
 		/// Connect to the del.icio.us API
 		/// </summary>
-		/// <param name="relativeUrl">Constant defined in <c>Netlicious.Constants.RelativeUrl</c></param>
+		/// <param name="relativeUrl">Constant defined in <c>Delicious.Constants.RelativeUrl</c></param>
 		/// <returns>XmlDocument containing data from the del.icio.us api call</returns>
 		internal static XmlDocument Connect (string relativeUrl)
 		{
@@ -63,7 +63,7 @@ namespace Netlicious
 		/// <summary>
 		/// Connect to the del.icio.us API
 		/// </summary>
-		/// <param name="relativeUrl">Constant defined in <c>Netlicious.Constants.RelativeUrl</c></param>
+		/// <param name="relativeUrl">Constant defined in <c>Delicious.Constants.RelativeUrl</c></param>
 		/// <param name="millisecondsBetweenQueries">The amount of time that must pass between queries</param>
 		/// <returns>XmlDocument containing data from the del.icio.us api call</returns>
 		private static XmlDocument Connect (string relativeUrl, int millisecondsBetweenQueries)
@@ -104,11 +104,11 @@ namespace Netlicious
 				}
 				else if (webResponse.StatusCode == HttpStatusCode.Unauthorized /*401*/)
 				{
-					throw new Exceptions.NetliciousNotAuthorizedException ("Invalid username/password combination");
+					throw new Exceptions.DeliciousNotAuthorizedException ("Invalid username/password combination");
 				}
 				else
 				{
-					throw new Exceptions.NetliciousException (fullUrl);
+					throw new Exceptions.DeliciousException (fullUrl);
 				}
 			}
 

@@ -8,14 +8,14 @@
  * are met:
  *
  * Redistributions of source code must retain the above copyright
- *     notice, this list of conditions and the following disclaimer.
+ *		notice, this list of conditions and the following disclaimer.
  * Redistributions in binary form must reproduce the above
- *     copyright notice, this list of conditions and the following
- *     disclaimer in the documentation and/or other materials provided with
- *     the distribution.
+ *		copyright notice, this list of conditions and the following
+ *		disclaimer in the documentation and/or other materials provided with
+ *		the distribution.
  * Neither the name of "Nate Zobrist" nor the names of its
- *     contributors may be used to endorse or promote products derived from
- *     this software without specific prior written permission.
+ *		contributors may be used to endorse or promote products derived from
+ *		this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
  * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
@@ -31,11 +31,45 @@
 */
 #endregion Copyright (c) 2006, Nate Zobrist
 
-namespace Netlicious.Exceptions
+using System;
+
+using Delicious.Exceptions;
+
+using NUnit.Framework;
+
+namespace Delicious.Tests
 {
-	public class NetliciousException : System.Exception
+	[TestFixture]
+	public class DateTests : TestBase
 	{
-		public NetliciousException (string message) : base (message)
+		[Test]
+		public void ObjectEquality ()
+		{
+			Date d1 = new Date();
+			d1.Value = System.DateTime.Now.ToUniversalTime().ToString();
+			d1.Count = 42;
+
+			Date d2 = new Date (d1.Value, d1.Count);
+
+			Assert.IsTrue (d1 == d2, "(d1 == d2) should be true");
+			Assert.IsFalse (d1 != d2, "(d1 != d2) should be false");
+			Assert.IsTrue (d1.Equals (d2), "d1.Equals(d2) should be true");
+
+			Assert.IsTrue (d1.ReferenceEquals (d1), "d1.ReferenceEquals(d1) should be true");
+			Assert.IsFalse (d1.ReferenceEquals (d2), "d1.ReferenceEquals(d2) should be false");
+		}
+
+
+		[Test]
+		[Ignore ("TODO: Not yet implemented")]
+		public void GetWithPost ()
+		{
+		}
+
+
+		[Test]
+		[Ignore ("TODO: Not yet implemented")]
+		public void GetWithInboxEntries ()
 		{
 		}
 	}

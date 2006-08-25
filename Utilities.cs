@@ -36,7 +36,7 @@ using System.Globalization;
 using System.Web;
 using System.Xml;
 
-namespace Netlicious
+namespace Delicious
 {
 	internal static class Utilities
 	{

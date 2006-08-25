@@ -34,11 +34,11 @@
 using System;
 using System.Collections.Generic;
 
-using Netlicious.Exceptions;
+using Delicious.Exceptions;
 
 using NUnit.Framework;
 
-namespace Netlicious.Tests
+namespace Delicious.Tests
 {
 	public class TestBase
 	{

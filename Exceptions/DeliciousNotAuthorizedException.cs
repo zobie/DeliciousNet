@@ -31,11 +31,11 @@
 */
 #endregion Copyright (c) 2006, Nate Zobrist
 
-namespace Netlicious.Exceptions
+namespace Delicious.Exceptions
 {
-	public class NetliciousNotAuthorizedException : System.Exception
+	public class DeliciousNotAuthorizedException : System.Exception
 	{
-		public NetliciousNotAuthorizedException (string message) : base (message)
+		public DeliciousNotAuthorizedException (string message) : base (message)
 		{
 		}
 	}

@@ -33,11 +33,11 @@
 
 using System;
 
-using Netlicious.Exceptions;
+using Delicious.Exceptions;
 
 using NUnit.Framework;
 
-namespace Netlicious.Tests
+namespace Delicious.Tests
 {
 	[TestFixture]
 	public class ConnectionTests : TestBase
@@ -69,7 +69,7 @@ namespace Netlicious.Tests
 			{
 				DateTime lastUpdated = Connection.LastUpdated ();
 			}
-			catch (NetliciousNotAuthorizedException)
+			catch (DeliciousNotAuthorizedException)
 			{
 				exceptionThrown = true;
 			}
