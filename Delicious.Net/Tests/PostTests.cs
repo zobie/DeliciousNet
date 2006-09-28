@@ -87,7 +87,7 @@ namespace Delicious.Tests
 		{
 			string url = this.AddNewUrlToDelicious ();
 			Post p = Post.GetPost (url);
-			Assert.IsTrue (p != null && p.Href == url,
+			Assert.IsTrue (p != null && p.Href.Equals (url, StringComparison.OrdinalIgnoreCase),
 			               "The url (" + url + ") was not sucessfully retrieved.");
 		}
 
@@ -101,7 +101,7 @@ namespace Delicious.Tests
 			List<Post> posts = Post.GetRecentPosts();
 			foreach (Post p in posts)
 			{
-				if (p.Href == url)
+				if (p.Href.Equals (url, StringComparison.OrdinalIgnoreCase))
 				{
 					found = true;
 					break;
@@ -123,7 +123,7 @@ namespace Delicious.Tests
 			List<Post> posts = Post.GetRecentPosts (tag1);
 			foreach (Post p in posts)
 			{
-				if (p.Href == url)
+				if (p.Href.Equals (url, StringComparison.OrdinalIgnoreCase))
 				{
 					found = true;
 					break;
@@ -135,7 +135,7 @@ namespace Delicious.Tests
 			posts = Post.GetRecentPosts (tag2);
 			foreach (Post p in posts)
 			{
-				if (p.Href == url)
+				if (p.Href.Equals (url, StringComparison.OrdinalIgnoreCase))
 				{
 					found = true;
 					break;
