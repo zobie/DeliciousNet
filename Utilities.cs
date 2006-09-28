@@ -42,6 +42,9 @@ namespace Delicious
 	{
 		internal static string AddParameter (string baseUrl, string parameter, string value)
 		{
+			// this will get our url's properly formatted
+            if (parameter == Constants.UrlParameter.Url)
+                value = new Uri(value).ToString();
 			value = HttpUtility.UrlEncode (value);
 
 			// insert the '?' if needed
@@ -55,14 +58,9 @@ namespace Delicious
 			if (baseUrl.Length > qLocation + 1)
 				baseUrl += "&";
 	
-			// del.icio.us seems to always add a trailing slash to added urls
-			if (parameter == Constants.UrlParameter.Url && !value.EndsWith (HttpUtility.UrlEncode ("/")))
-				value += HttpUtility.UrlEncode ("/");
-
 			baseUrl += parameter + "=" + value;
 			return baseUrl;
 		}
-
 
 		internal static DateTime ConvertFromDeliciousTime (string time)
 		{

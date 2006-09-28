@@ -33,6 +33,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Text;
 
 using Delicious.Exceptions;
 
@@ -64,7 +65,27 @@ namespace Delicious.Tests
 		System.Random rand = new System.Random ();
 		protected string GetRandomString ()
 		{
-			return rand.Next ().ToString();
+		    int minLength = 3;
+		    int maxLength = 15;
+
+		    StringBuilder sb = new StringBuilder();
+		    int length = minLength + rand.Next (maxLength - minLength + 1);
+		    for (int i = 0; i < length; i++)
+		    {
+		        switch (rand.Next (3))
+		        {
+		            case 1:
+		                sb.Append ((char)('A' + rand.Next (26)));
+		                break;
+		            case 2:
+		                sb.Append ((char)('a' + rand.Next (26)));
+		                break;
+		            case 0:
+		                sb.Append ((char)('0' + rand.Next (10)));
+		                break;
+		        }
+		    }
+		    return sb.ToString();
 		}
 
 		protected string GetRandomUrl ()
