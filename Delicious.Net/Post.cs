@@ -457,19 +457,21 @@ namespace Delicious
 		{
 			List<Post> posts = new List<Post> (nodeList.Count);
 
-			foreach (XmlNode node in nodeList)
-			{
-				string href = node.Attributes[ Constants.XmlAttribute.Href ].Value;
-				string description = node.Attributes[ Constants.XmlAttribute.Description ].Value;
-				string hash = node.Attributes[ Constants.XmlAttribute.Hash ].Value;
-				string tag = node.Attributes[ Constants.XmlAttribute.Tag ].Value;
-				string time = node.Attributes[ Constants.XmlAttribute.Time ].Value;
-				string extended = (node.Attributes[ Constants.XmlAttribute.Extended ] == null) ? String.Empty : node.Attributes[ Constants.XmlAttribute.Extended ].Value;
-				bool shared = (node.Attributes[ Constants.XmlAttribute.Shared ] == null) ? false : (node.Attributes[ Constants.XmlAttribute.Shared ].Value == Constants.UrlParameter.No);
+            foreach (XmlNode node in nodeList)
+            {
+                string href = node.Attributes[ Constants.XmlAttribute.Href ].Value;
+                string description = node.Attributes[ Constants.XmlAttribute.Description ].Value;
+                string hash = node.Attributes[ Constants.XmlAttribute.Hash ].Value;
+                string tag = node.Attributes[ Constants.XmlAttribute.Tag ].Value;
+                string time = node.Attributes[ Constants.XmlAttribute.Time ].Value;
+                string extended = (node.Attributes[ Constants.XmlAttribute.Extended ] == null) ? String.Empty : node.Attributes[ Constants.XmlAttribute.Extended ].Value;
+                bool shared = true;
+                if (node.Attributes[ Constants.XmlAttribute.Shared ] != null)
+                    shared = (node.Attributes[ Constants.XmlAttribute.Shared ].Value != Constants.UrlParameter.No);
 
-				Post post = new Post (href, description, hash, tag, time, extended, shared);
-				posts.Add (post);
-			}
+                Post post = new Post (href, description, hash, tag, time, extended, shared);
+                posts.Add (post);
+            }
 			return posts;
 		}
 

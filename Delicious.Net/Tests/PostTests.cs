@@ -145,6 +145,25 @@ namespace Delicious.Tests
 		}
 
 
+        [Test]
+        public void GetSharedPosts ()
+        {
+            string urlShared = this.AddNewUrlToDelicious ();
+
+            string urlNotShared = this.GetRandomUrl ();
+            Post.Add (urlNotShared, urlNotShared, null, null, null, false, false);
+            CleanupPostList.Add (urlNotShared);
+
+            Post postShared = Post.GetPost (urlShared);
+            Assert.IsTrue (postShared.Shared,
+                "This url was imported into Delicious.Net as NOT shared but in fact it is shared on delicious.  (" + urlShared + ")");
+
+            Post postNotShared = Post.GetPost (urlNotShared);
+            Assert.IsTrue (!postNotShared.Shared,
+                "This url was imported into Delicious.Net as shared but in fact it is NOT shared on delicious.  (" + urlNotShared + ")");
+        }
+
+
 		[Test]
 		public void DeletePost ()
 		{
