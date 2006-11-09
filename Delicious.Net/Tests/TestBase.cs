@@ -42,8 +42,9 @@ using NUnit.Framework;
 namespace Delicious.Tests
 {
 	public class TestBase
-	{
-		protected static List<string> CleanupPostList = new List<string> ();
+    {
+        protected static List<string> CleanupPostList = new List<string> ();
+        protected static List<string> CleanupBundleList = new List<string> ();
 
 		[TestFixtureSetUp]
 		public virtual void Init ()
@@ -57,8 +58,18 @@ namespace Delicious.Tests
 		[TestFixtureTearDown]
 		public virtual void Dispose ()
 		{
-			foreach (string url in CleanupPostList)
-				Post.Delete (url);
+            while (CleanupPostList.Count > 0)
+            {
+                string url = CleanupPostList[ 0 ];
+                Post.Delete (url);
+                CleanupPostList.Remove (url);
+            }
+            while (CleanupBundleList.Count > 0)
+            {
+                string bundle = CleanupBundleList[ 0 ];
+                Bundle.Delete (bundle);
+                CleanupBundleList.Remove (bundle);
+            }
 		}
 
 
