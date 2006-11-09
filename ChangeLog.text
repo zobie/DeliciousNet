@@ -1,3 +1,10 @@
+Version 1.4
+------------------------------------
+Add new DeliciousTimeoutException
+Cleanup bundles which are created by the unit tests.
+Switch the use of the WebClient for the del.icio.us connection to the HttpWebRequest/Response.  This change allows for greater flexability over the timeout.  Also enhance the handling of the case where the del.icio.us servers timeout.  We will now only retry the query five times (default, can be changed by user) and increase the time between tries.
+
+
 Version 1.3
 ------------------------------------
 Fixed bug where the Shared bit on posts was intrepreted incorrectly.
