@@ -72,7 +72,8 @@ namespace Delicious.Tests
 
 			string bundleName = this.GetRandomString();
 			bool added = Bundle.Add (bundleName, tag1 + " " + tag2);
-			Assert.IsTrue (added, "The Bundle does not seem to have been sucessfully added.");
+            CleanupBundleList.Add (bundleName);
+			Assert.IsTrue (added, "The Bundle '" + bundleName + "' does not seem to have been sucessfully added.");
 		}
 
 
@@ -80,11 +81,12 @@ namespace Delicious.Tests
 		public void Delete ()
 		{
 			string tag = this.GetRandomString();
-			this.AddNewUrlToDelicious (tag);
+			string url = this.AddNewUrlToDelicious (tag);
+            Assert.IsTrue (url.Length > 0, "The url '" + url + "' was not sucessfully added.");
 
 			string bundleName = this.GetRandomString();
-			Bundle.Add (bundleName, tag);
-
+            Bundle.Add (bundleName, tag);
+            CleanupBundleList.Add (bundleName);
 			bool found = false;
 			List<Bundle> bundles = Bundle.Get();
 			foreach (Bundle b in bundles)
@@ -97,7 +99,8 @@ namespace Delicious.Tests
 			}
 			Assert.IsTrue (found, "The Bundle '" + bundleName + "' was not sucessfully added");
 
-			Bundle.Delete (bundleName);
+            Bundle.Delete (bundleName);
+            CleanupBundleList.Remove (bundleName);
 			found = false;
 			bundles = Bundle.Get();
 			foreach (Bundle b in bundles)
@@ -122,7 +125,9 @@ namespace Delicious.Tests
 			this.AddNewUrlToDelicious (tag2);
 
 			string bundleName = this.GetRandomString();
-			Bundle.Add (bundleName, tag1 + " " + tag2);
+            bool added = Bundle.Add (bundleName, tag1 + " " + tag2);
+            CleanupBundleList.Add (bundleName);
+            Assert.IsTrue (added, "The Bundle '" + bundleName + "' was not sucessfully added.");
 
 			bool found = false;
 			bool tag1InBundle = false;
