@@ -1,6 +1,6 @@
-#region Copyright (c) 2006, Nate Zobrist
+#region Copyright (c) 2006-2007, Nate Zobrist
 /*
- * Copyright (c) 2006, Nate Zobrist
+ * Copyright (c) 2006-2007, Nate Zobrist
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#endregion Copyright (c) 2006, Nate Zobrist
+#endregion Copyright (c) 2006-2007, Nate Zobrist
 
 using System;
 using System.Globalization;

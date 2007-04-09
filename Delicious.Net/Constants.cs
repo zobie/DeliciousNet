@@ -1,8 +1,8 @@
-#region Copyright (c) 2006, Nate Zobrist
+#region Copyright (c) 2006-2007, Nate Zobrist
 
 
 /*
- * Copyright (c) 2006, Nate Zobrist
+ * Copyright (c) 2006-2007, Nate Zobrist
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 */
 
 
-#endregion Copyright (c) 2006, Nate Zobrist
+#endregion Copyright (c) 2006-2007, Nate Zobrist
 
 
 namespace Delicious
@@ -43,113 +43,131 @@ namespace Delicious
 		/// <summary>
 		/// Default url used to access the del.icio.us API
 		/// </summary>
-        internal const string ApiBaseUrl = "https://api.del.icio.us/v1/";
+		public const string ApiBaseUrl = "https://api.del.icio.us/v1/";
 
 		/// <summary>
 		/// Per comment on del.icious.us API site we use an identifiable User-Agent.
 		/// The default identifiers like "Java/1.4.3" or "lwp-perl" etc tend to get banned from time to time.
 		/// </summary>
-        internal const string UserAgentValue = @"Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3";
+		public const string UserAgentValue = @"Mozilla/5.0 (Macintosh; U; PPC Mac OS X; en) AppleWebKit/418.8 (KHTML, like Gecko) Safari/419.3";
 
-        internal const int DefaultPostCount = 15;
-        internal const int MaxPostCount = 100;
+		public const int DefaultPostCount = 15;
+		public const int MaxPostCount = 100;
+
+        public const int DefaultTimeOut = 20000;
+
+		/// <summary>
+		/// Get the minimum number of milliseconds that must elapse between each
+		/// query to the del.icio.us servers.
+		/// </summary>
+		public static int MinimumMillisecondsBetweenQueries
+		{
+			get
+			{
+				// During debugging we set this to a higher value than release
+				// mode becuase the unit tests likely have a higher chance of
+				// being throttled than a normal application using the API.
+#if DEBUG
+				return 2000;
+#else
+				return 1000;
+#endif
+			}
+		}
+
 
         /// <summary>
-        /// The default http timeout for a connection to the del.icio.us servers
+        /// Get the maximum number of times that each query will automatically be resent
+		/// in cases where the del.icio.us server does not respond as expected.
         /// </summary>
-        internal const int DefaultTimeOut = 20000;
-
-        /// <summary>
-        /// How many times should we retry the delicious servers if we get a timeout error
-        /// </summary>
-        internal const int MaxRetries = 5;
+        public const int MaxRetries = 5;
 
 
 		/// <summary>
 		/// Relative urls used to work with the del.icio.us API.
 		/// </summary>
-        internal static class RelativeUrl
+		public static class RelativeUrl
 		{
-			internal const string BundlesAll = "tags/bundles/all?";
-			internal const string BundlesDelete = "tags/bundles/delete?";
-			internal const string BundlesSet = "tags/bundles/set?";
+			public const string BundlesAll = "tags/bundles/all?";
+			public const string BundlesDelete = "tags/bundles/delete?";
+			public const string BundlesSet = "tags/bundles/set?";
 
-			internal const string InboxGet = "inbox/get?";
+			public const string InboxGet = "inbox/get?";
 
-			internal const string PostsAdd = "posts/add?";
-			internal const string PostsAll = "posts/all?";
-			internal const string PostsDelete = "posts/delete?";
-			internal const string PostsGet = "posts/get?";
-			internal const string PostsRecent = "posts/recent?";
-			internal const string PostsUpdate = "posts/update?";
+			public const string PostsAdd = "posts/add?";
+			public const string PostsAll = "posts/all?";
+			public const string PostsDelete = "posts/delete?";
+			public const string PostsGet = "posts/get?";
+			public const string PostsRecent = "posts/recent?";
+			public const string PostsUpdate = "posts/update?";
 
-			internal const string TagsGet = "tags/get?";
-			internal const string TagsRename = "tags/rename?";
+			public const string TagsGet = "tags/get?";
+			public const string TagsRename = "tags/rename?";
 		}
 
 
 		/// <summary>
 		/// URL parameters for sending data to del.icio.us
 		/// </summary>
-        internal static class UrlParameter
+		public static class UrlParameter
 		{
-			internal const string Bundle = "bundle";
-			internal const string Count = "count";
-			internal const string Date = "dt";
-			internal const string Description = "description";
-			internal const string Extended = "extended";
-			internal const string New = "new";
-			internal const string Old = "old";
-			internal const string Replace = "replace";
-			internal const string Shared = "shared";
-			internal const string Tag = "tag";
-			internal const string Tags = "tags";
-			internal const string Url = "url";
+			public const string Bundle = "bundle";
+			public const string Count = "count";
+			public const string Date = "dt";
+			public const string Description = "description";
+			public const string Extended = "extended";
+			public const string New = "new";
+			public const string Old = "old";
+			public const string Replace = "replace";
+			public const string Shared = "shared";
+			public const string Tag = "tag";
+			public const string Tags = "tags";
+			public const string Url = "url";
 
-			internal const string No = "no";
-			internal const string Yes = "yes";
+			public const string No = "no";
+			public const string Yes = "yes";
 		}
 
 
 		/// <summary>
 		/// Codes that are returned from del.icio.us
 		/// </summary>
-        internal static class ReturnCode
+		public static class ReturnCode
 		{
-			internal const string Done = "done";
-			internal const string Ok = "ok";
-			internal const string SomethingWentWrong = "something went wrong";
+			public const string Done = "done";
+			public const string Ok = "ok";
+			public const string SomethingWentWrong = "something went wrong";
 		}
 
 
 		/// <summary>
 		/// XmlTags returned from del.icio.us
 		/// </summary>
-        internal static class XmlTag
+		public static class XmlTag
 		{
-			internal const string Bundle = "bundle";
-			internal const string Post = "post";
-			internal const string Result = "result";
-			internal const string Tag = "tag";
-			internal const string Update = "update";
+			public const string Bundle = "bundle";
+			public const string Post = "post";
+			public const string Result = "result";
+			public const string Tag = "tag";
+			public const string Update = "update";
 		}
 
 
 		/// <summary>
 		/// XmlAttributes returned from del.icio.us
 		/// </summary>
-        internal static class XmlAttribute
+		public static class XmlAttribute
 		{
-			internal const string Count = "count";
-			internal const string Description = "description";
-			internal const string Extended = "extended";
-			internal const string Hash = "hash";
-			internal const string Href = "href";
-			internal const string Name = "name";
-			internal const string Shared = "shared";
-			internal const string Tag = "tag";
-			internal const string Tags = "tags";
-			internal const string Time = "time";
+			public const string Count = "count";
+			public const string Description = "description";
+			public const string Extended = "extended";
+			public const string Hash = "hash";
+			public const string Href = "href";
+			public const string Name = "name";
+			public const string Shared = "shared";
+			public const string Tag = "tag";
+			public const string Tags = "tags";
+			public const string Time = "time";
 		}
 	}
 }
