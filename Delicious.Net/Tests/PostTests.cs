@@ -43,11 +43,30 @@ namespace Delicious.Tests
 	[TestFixture]
 	public class PostTests : TestBase
 	{
+		internal static string AddTestPost ()
+		{
+			return AddTestPost (null);
+		}
+
+		internal static string AddTestPost (string tags)
+		{
+			string url = GetRandomUrl ();
+			string description = url;
+			bool added;
+			if (tags == null || tags.Length == 0)
+				added = Post.Add (url, description);
+			else
+				added = Post.Add (url, description, null, tags, null);
+			CleanupPostList.Add (url);
+			Assert.IsTrue (added, "The Post '" + url + "' was not sucessfully added with tags '" + tags + "'");
+			return url;
+		}
+
 		[Test]
 		public void ObjectEquality ()
 		{
 			Post p1 = new Post();
-			p1.Href = this.GetRandomUrl();
+			p1.Href = GetRandomUrl();
 			p1.Description = p1.Href;
 
 			Post p2 = new Post (p1.Href, p1.Description, p1.Hash, p1.Tag, p1.Time, p1.Extended, p1.Shared);
@@ -64,7 +83,7 @@ namespace Delicious.Tests
 		[Test]
 		public void AddPost ()
 		{
-			string url = this.GetRandomUrl();
+			string url = GetRandomUrl();
 			string description = url;
 			bool added = Post.Add (url, description);
 			CleanupPostList.Add (url);
@@ -76,7 +95,7 @@ namespace Delicious.Tests
 		[Test]
 		public void Get ()
 		{
-			string url = this.AddNewUrlToDelicious ();
+			string url = AddTestPost ();
 			List<Post> posts = Post.Get();
 			Assert.IsTrue (posts.Count > 0, "At least one post (" + url + ") should have been returned.");
 		}
@@ -85,7 +104,7 @@ namespace Delicious.Tests
 		[Test]
 		public void GetPost ()
 		{
-			string url = this.AddNewUrlToDelicious ();
+			string url = AddTestPost ();
 			Post p = Post.GetPost (url);
 			Assert.IsTrue (p != null && p.Href.Equals (url, StringComparison.OrdinalIgnoreCase),
 			               "The url (" + url + ") was not sucessfully retrieved.");
@@ -95,7 +114,7 @@ namespace Delicious.Tests
 		[Test]
 		public void GetRecentPosts0 ()
 		{
-			string url = this.AddNewUrlToDelicious ();
+			string url = AddTestPost ();
 
 			bool found = false;
 			List<Post> posts = Post.GetRecentPosts();
@@ -117,7 +136,7 @@ namespace Delicious.Tests
 		{
 			string tag1 = "tag1";
 			string tag2 = "tag2";
-			string url = this.AddNewUrlToDelicious (tag1 + " " + tag2);
+			string url = AddTestPost (tag1 + " " + tag2);
 
 			bool found = false;
 			List<Post> posts = Post.GetRecentPosts (tag1);
@@ -148,9 +167,9 @@ namespace Delicious.Tests
         [Test]
         public void GetSharedPosts ()
         {
-            string urlShared = this.AddNewUrlToDelicious ();
+            string urlShared = AddTestPost ();
 
-            string urlNotShared = this.GetRandomUrl ();
+            string urlNotShared = GetRandomUrl ();
             Post.Add (urlNotShared, urlNotShared, null, null, null, false, false);
             CleanupPostList.Add (urlNotShared);
 
@@ -167,7 +186,7 @@ namespace Delicious.Tests
 		[Test]
 		public void DeletePost ()
 		{
-			string url = this.GetRandomUrl();
+			string url = GetRandomUrl();
 			string description = url;
 			bool added = Post.Add (url, description);
 			CleanupPostList.Add (url);

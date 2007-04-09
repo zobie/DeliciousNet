@@ -47,7 +47,7 @@ namespace Delicious.Tests
 		public void ObjectEquality ()
 		{
 			Tag t1 = new Tag();
-			t1.Name = this.GetRandomUrl();
+			t1.Name = GetRandomUrl();
 			t1.Count = 42;
 
 			Tag t2 = new Tag (t1.Name, t1.Count);
@@ -64,8 +64,8 @@ namespace Delicious.Tests
 		[Test]
 		public void Get ()
 		{
-			string tag = this.GetRandomString();
-			string url = this.AddNewUrlToDelicious (tag);
+			string tag = GetRandomString();
+			string url = PostTests.AddTestPost (tag);
 
 			List<Tag> tags = Tag.Get();
 
@@ -86,9 +86,9 @@ namespace Delicious.Tests
 		[Test]
 		public void Rename ()
 		{
-			string tag = this.GetRandomString();
-			string newTag = this.GetRandomString();
-			string url = this.AddNewUrlToDelicious (tag);
+			string tag = GetRandomString();
+			string newTag = GetRandomString();
+			string url = PostTests.AddTestPost (tag);
 
 			Post p = Post.GetPost (url);
 			Assert.IsTrue (p.Tag == tag, "The post was not sucessfully created with the tag");

@@ -43,12 +43,23 @@ namespace Delicious.Tests
 	[TestFixture]
 	public class BundleTests : TestBase
 	{
+		internal static string AddTestBundle (string tags)
+		{
+			string bundleName = GetRandomString ();
+			bool added = Bundle.Add (bundleName, tags);
+			CleanupBundleList.Add (bundleName);
+			Assert.IsTrue (added, "The Bundle '" + bundleName + "' was not sucessfully added.");
+
+			return bundleName;
+		}
+
+
 		[Test]
 		public void ObjectEquality ()
 		{
 			Bundle b1 = new Bundle();
-			b1.Name = this.GetRandomUrl();
-			b1.Tags = this.GetRandomString() + " " + this.GetRandomString();
+			b1.Name = GetRandomUrl();
+			b1.Tags = GetRandomString() + " " + GetRandomString();
 
 			Bundle b2 = new Bundle (b1.Name, b1.Tags);
 
@@ -64,31 +75,17 @@ namespace Delicious.Tests
 		[Test]
 		public void Add ()
 		{
-			string tag1 = this.GetRandomString();
-			this.AddNewUrlToDelicious (tag1);
+			string tag1 = GetRandomString();
+			PostTests.AddTestPost (tag1);
 
-			string tag2 = this.GetRandomString();
-			this.AddNewUrlToDelicious (tag2);
+			string tag2 = GetRandomString();
+			PostTests.AddTestPost (tag2);
 
-			string bundleName = this.GetRandomString();
-			bool added = Bundle.Add (bundleName, tag1 + " " + tag2);
-            CleanupBundleList.Add (bundleName);
-			Assert.IsTrue (added, "The Bundle '" + bundleName + "' does not seem to have been sucessfully added.");
-		}
-
-
-		[Test]
-		public void Delete ()
-		{
-			string tag = this.GetRandomString();
-			string url = this.AddNewUrlToDelicious (tag);
-            Assert.IsTrue (url.Length > 0, "The url '" + url + "' was not sucessfully added.");
-
-			string bundleName = this.GetRandomString();
-            Bundle.Add (bundleName, tag);
-            CleanupBundleList.Add (bundleName);
+			string bundleName = AddTestBundle (tag1 + " " + tag2);
+			// it regularly take a couple of seconds for the added bundle to show up through the api
 			bool found = false;
-			List<Bundle> bundles = Bundle.Get();
+			System.Threading.Thread.Sleep (2000);
+			List<Bundle> bundles = Bundle.Get ();
 			foreach (Bundle b in bundles)
 			{
 				if (b.Name == bundleName)
@@ -97,14 +94,25 @@ namespace Delicious.Tests
 					break;
 				}
 			}
-			Assert.IsTrue (found, "The Bundle '" + bundleName + "' was not sucessfully added");
+			Assert.IsTrue (found, "The Bundle '" + bundleName + "' does not seem to have been sucessfully added.");
+		}
+
+
+		[Test]
+		public void Delete ()
+		{
+			string tag = GetRandomString();
+			string url = PostTests.AddTestPost (tag);
+            Assert.IsTrue (url.Length > 0, "The url '" + url + "' was not sucessfully added.");
+
+			string bundleName = AddTestBundle (tag);
 
             Bundle.Delete (bundleName);
             CleanupBundleList.Remove (bundleName);
-			found = false;
+			bool found = false;
 			// it regularly take a couple of seconds for the deleted bundle to show as deleted through the api
 			System.Threading.Thread.Sleep (2000);
-			bundles = Bundle.Get();
+			List<Bundle> bundles = Bundle.Get ();
 			foreach (Bundle b in bundles)
 			{
 				if (b.Name == bundleName)
@@ -120,16 +128,13 @@ namespace Delicious.Tests
 		[Test]
 		public void Get ()
 		{
-			string tag1 = this.GetRandomString() + "#?%&";
-			this.AddNewUrlToDelicious (tag1);
+			string tag1 = GetRandomString() + "#?%&";
+			PostTests.AddTestPost (tag1);
 
-			string tag2 = this.GetRandomString();
-			this.AddNewUrlToDelicious (tag2);
+			string tag2 = GetRandomString();
+			PostTests.AddTestPost (tag2);
 
-			string bundleName = this.GetRandomString();
-            bool added = Bundle.Add (bundleName, tag1 + " " + tag2);
-            CleanupBundleList.Add (bundleName);
-            Assert.IsTrue (added, "The Bundle '" + bundleName + "' was not sucessfully added.");
+			string bundleName = AddTestBundle (tag1 + " " + tag2);
 
 			bool found = false;
 			bool tag1InBundle = false;

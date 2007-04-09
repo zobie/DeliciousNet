@@ -73,8 +73,8 @@ namespace Delicious.Tests
 		}
 
 
-		System.Random rand = new System.Random ();
-		protected string GetRandomString ()
+		private static System.Random rand = new System.Random ();
+		protected static string GetRandomString ()
 		{
 		    int minLength = 3;
 		    int maxLength = 15;
@@ -99,26 +99,9 @@ namespace Delicious.Tests
 		    return sb.ToString();
 		}
 
-		protected string GetRandomUrl ()
+		protected static string GetRandomUrl ()
 		{
-			return "http://www." + this.GetRandomString() + ".com/";
-		}
-
-		protected string AddNewUrlToDelicious ()
-		{
-			return this.AddNewUrlToDelicious (null);
-		}
-
-		protected string AddNewUrlToDelicious (string tags)
-		{
-			string url = this.GetRandomUrl ();
-			string description = url;
-			if (tags == null || tags.Length == 0)
-				Post.Add (url, description);
-			else
-				Post.Add (url, description, null, tags, null);
-			CleanupPostList.Add (url);
-			return url;
+			return "http://www." + GetRandomString() + ".com/";
 		}
 	}
 }
