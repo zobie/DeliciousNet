@@ -1,6 +1,6 @@
-#region Copyright (c) 2006, Nate Zobrist
+#region Copyright (c) 2006-2007, Nate Zobrist
 /*
- * Copyright (c) 2006, Nate Zobrist
+ * Copyright (c) 2006-2007, Nate Zobrist
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE
  * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
-#endregion Copyright (c) 2006, Nate Zobrist
+#endregion Copyright (c) 2006-2007, Nate Zobrist
 
 using System;
 using System.Collections.Generic;
@@ -305,6 +305,18 @@ namespace Delicious
 		public static List<Post> Get ()
 		{
 			return Get (null);
+		}
+
+
+		/// <summary>
+		/// Return the complete list of posts from del.icio.us servers exactly
+		/// as delivered from the del.icio.us API (raw xml)
+		/// </summary>
+		/// <returns>a <c>string</c> of raw xml data</returns>
+		public static string GetRawXml ()
+		{
+			string relativeUrl = Constants.RelativeUrl.PostsAll;
+			return Connection.GetRawXml (relativeUrl);
 		}
 
 
