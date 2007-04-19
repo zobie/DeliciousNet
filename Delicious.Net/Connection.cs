@@ -132,28 +132,30 @@ namespace Delicious
 			catch (WebException e)
 			{
 				if (e.Status == WebExceptionStatus.ProtocolError ||
-				    e.Status == WebExceptionStatus.Timeout)
+					e.Status == WebExceptionStatus.Timeout)
 				{
 					HttpWebResponse webResponse = e.Response as HttpWebResponse;
-
-					// del.icio.us servers seem to have less-than-ideal response times quite often.
-					// we try to compensate for those probelms, but eventually error out.
-					if (e.Status == WebExceptionStatus.Timeout ||
-					    webResponse.StatusCode == HttpStatusCode.ServiceUnavailable /*503 we have been throttled*/||
-					    (int)webResponse.StatusCode == 999 /*Unable to process request at this time*/)
+					if (webResponse != null)
 					{
-						if (callCount < MaxRetries) // don't loop endlessly here, eventually just error out
-							return GetRawXml (relativeUrl, callCount + 1);
+						// del.icio.us servers seem to have less-than-ideal response times quite often.
+						// we try to compensate for those probelms, but eventually error out.
+						if (e.Status == WebExceptionStatus.Timeout ||
+						    webResponse.StatusCode == HttpStatusCode.ServiceUnavailable /*503 we have been throttled*/||
+						    (int)webResponse.StatusCode == 999 /*Unable to process request at this time*/)
+						{
+							if (callCount < MaxRetries) // don't loop endlessly here, eventually just error out
+								return GetRawXml (relativeUrl, callCount + 1);
+							else
+								throw new Exceptions.DeliciousTimeoutException (String.Format ("The server is not responding.\t{0}", webResponse.StatusCode));
+						}
+						else if (webResponse.StatusCode == HttpStatusCode.Unauthorized /*401*/)
+						{
+							throw new Exceptions.DeliciousNotAuthorizedException ("Invalid username/password combination");
+						}
 						else
-							throw new Exceptions.DeliciousTimeoutException (String.Format ("The server is not responding.\t{0}", webResponse.StatusCode));
-					}
-					else if (webResponse.StatusCode == HttpStatusCode.Unauthorized /*401*/)
-					{
-						throw new Exceptions.DeliciousNotAuthorizedException ("Invalid username/password combination");
-					}
-					else
-					{
-						throw new Exceptions.DeliciousException (webResponse.StatusCode.ToString());
+						{
+							throw new Exceptions.DeliciousException (webResponse.StatusCode.ToString());
+						}
 					}
 				}
 

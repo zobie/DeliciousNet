@@ -1,3 +1,8 @@
+Version 1.6
+------------------------------------
+Null check in Connection to prevent a possible null reference exception.
+
+
 Version 1.5
 ------------------------------------
 Added new APIs to allow user to get raw xml data instead of XmlDocuments or Delicious objects.
