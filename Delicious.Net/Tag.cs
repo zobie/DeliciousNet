@@ -167,7 +167,7 @@ namespace Delicious
 		/// </summary>
 		/// <param name="oldName">Name of the tag that is to be renamed</param>
 		/// <param name="newName">Requested new name for the tag</param>
-		/// <returns>true if the tag was renamed, false otherwi</returns>
+		/// <returns>true if the tag was renamed, false otherwise</returns>
 		public static bool Rename (string oldName, string newName)
 		{
 			if (oldName == null || oldName.Length == 0 ||
