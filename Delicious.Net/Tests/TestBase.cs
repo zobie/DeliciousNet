@@ -39,6 +39,7 @@ using Delicious.Exceptions;
 
 using NUnit.Framework;
 
+#if DEBUG
 namespace Delicious.Tests
 {
 	public class TestBase
@@ -73,7 +74,7 @@ namespace Delicious.Tests
 		}
 
 
-		private static System.Random rand = new System.Random ();
+		private static readonly System.Random rand = new System.Random ();
 		protected static string GetRandomString ()
 		{
 		    int minLength = 3;
@@ -105,3 +106,4 @@ namespace Delicious.Tests
 		}
 	}
 }
+#endif

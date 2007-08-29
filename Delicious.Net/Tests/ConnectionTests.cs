@@ -37,6 +37,7 @@ using Delicious.Exceptions;
 
 using NUnit.Framework;
 
+#if DEBUG
 namespace Delicious.Tests
 {
 	[TestFixture]
@@ -67,7 +68,7 @@ namespace Delicious.Tests
 
 			try
 			{
-				DateTime lastUpdated = Connection.LastUpdated ();
+				Connection.LastUpdated ();
 			}
 			catch (DeliciousNotAuthorizedException)
 			{
@@ -84,3 +85,4 @@ namespace Delicious.Tests
 		}
 	}
 }
+#endif

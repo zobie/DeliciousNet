@@ -38,6 +38,7 @@ using Delicious.Exceptions;
 
 using NUnit.Framework;
 
+#if DEBUG
 namespace Delicious.Tests
 {
 	[TestFixture]
@@ -65,7 +66,7 @@ namespace Delicious.Tests
 		public void Get ()
 		{
 			string tag = GetRandomString();
-			string url = PostTests.AddTestPost (tag);
+			PostTests.AddTestPost (tag);
 
 			List<Tag> tags = Tag.Get();
 
@@ -99,3 +100,4 @@ namespace Delicious.Tests
 		}
 	}
 }
+#endif

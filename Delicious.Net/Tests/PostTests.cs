@@ -38,6 +38,7 @@ using Delicious.Exceptions;
 
 using NUnit.Framework;
 
+#if DEBUG
 namespace Delicious.Tests
 {
 	[TestFixture]
@@ -199,3 +200,4 @@ namespace Delicious.Tests
 		}
 	}
 }
+#endif
