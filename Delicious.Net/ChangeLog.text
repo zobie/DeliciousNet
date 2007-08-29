@@ -1,6 +1,7 @@
 Version 1.6
 ------------------------------------
 Null check in Connection to prevent a possible null reference exception.
+Wrapped unit tests in DEBUG compile flag so that the reference to the nunit framework will be optimized out of the release-compiled dll's.
 
 
 Version 1.5
