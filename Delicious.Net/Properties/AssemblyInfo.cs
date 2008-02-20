@@ -9,7 +9,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration ("")]
 [assembly: AssemblyCompany ("Procanta, LLC")]
 [assembly: AssemblyProduct ("Delicious.Net")]
-[assembly: AssemblyCopyright ("Copyright (c) 2006-2007, Nate Zobrist")]
+[assembly: AssemblyCopyright ("Copyright (c) 2006-2008, Nate Zobrist")]
 [assembly: AssemblyTrademark ("")]
 [assembly: AssemblyCulture ("")]
 

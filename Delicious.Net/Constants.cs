@@ -1,8 +1,8 @@
-#region Copyright (c) 2006-2007, Nate Zobrist
+#region Copyright (c) 2006-2008, Nate Zobrist
 
 
 /*
- * Copyright (c) 2006-2007, Nate Zobrist
+ * Copyright (c) 2006-2008, Nate Zobrist
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,7 +33,7 @@
 */
 
 
-#endregion Copyright (c) 2006-2007, Nate Zobrist
+#endregion Copyright (c) 2006-2008, Nate Zobrist
 
 
 namespace Delicious
