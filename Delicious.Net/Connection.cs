@@ -114,56 +114,61 @@ namespace Delicious
 
 			HttpWebResponse response = null;
 			StreamReader readStream = null;
-			try
-			{
-				HttpWebRequest request = (HttpWebRequest)WebRequest.Create (fullUrl);
-				request.Credentials = new System.Net.NetworkCredential (Username, Password);
-				request.Timeout = TimeOut;
-				request.AllowAutoRedirect = false;
-				request.UserAgent = Constants.UserAgentValue;
-				request.MaximumResponseHeadersLength = 4;
-				request.KeepAlive = false;
-				request.Pipelined = false;
-				response = (HttpWebResponse)request.GetResponse();
-				Stream receiveStream = response.GetResponseStream();
-				readStream = new StreamReader (receiveStream, Encoding.UTF8);
-				rawXml = readStream.ReadToEnd();
+            try
+            {
+                HttpWebRequest request = (HttpWebRequest)WebRequest.Create (fullUrl);
+                request.Credentials = new System.Net.NetworkCredential (Username, Password);
+                request.Timeout = TimeOut;
+                request.AllowAutoRedirect = false;
+                request.UserAgent = Constants.UserAgentValue;
+                request.MaximumResponseHeadersLength = 4;
+                request.KeepAlive = false;
+                request.Pipelined = false;
+                response = (HttpWebResponse)request.GetResponse ();
+                Stream receiveStream = response.GetResponseStream ();
+                readStream = new StreamReader (receiveStream, Encoding.UTF8);
+                rawXml = readStream.ReadToEnd ();
 
-				lastConnectTime = System.DateTime.Now;
-			}
-			catch (WebException e)
-			{
-				if (e.Status == WebExceptionStatus.ProtocolError ||
-					e.Status == WebExceptionStatus.Timeout)
-				{
-					HttpWebResponse webResponse = e.Response as HttpWebResponse;
-					if (webResponse != null)
-					{
-						// del.icio.us servers seem to have less-than-ideal response times quite often.
-						// we try to compensate for those probelms, but eventually error out.
-						if (e.Status == WebExceptionStatus.Timeout ||
-						    webResponse.StatusCode == HttpStatusCode.ServiceUnavailable /*503 we have been throttled*/||
-						    (int)webResponse.StatusCode == 999 /*Unable to process request at this time*/)
-						{
-							if (callCount < MaxRetries) // don't loop endlessly here, eventually just error out
-								return GetRawXml (relativeUrl, callCount + 1);
-							else
-								throw new Exceptions.DeliciousTimeoutException (String.Format ("The server is not responding.\t{0}", webResponse.StatusCode));
-						}
-						else if (webResponse.StatusCode == HttpStatusCode.Unauthorized /*401*/)
-						{
-							throw new Exceptions.DeliciousNotAuthorizedException ("Invalid username/password combination");
-						}
-						else
-						{
-							throw new Exceptions.DeliciousException (webResponse.StatusCode.ToString());
-						}
-					}
-				}
+                lastConnectTime = System.DateTime.Now;
+            }
+            catch (WebException e)
+            {
+                if (e.Status == WebExceptionStatus.ProtocolError ||
+                    e.Status == WebExceptionStatus.Timeout)
+                {
+                    HttpWebResponse webResponse = e.Response as HttpWebResponse;
+                    if (webResponse != null)
+                    {
+                        // del.icio.us servers seem to have less-than-ideal response times quite often.
+                        // we try to compensate for those probelms, but eventually error out.
+                        if (e.Status == WebExceptionStatus.Timeout ||
+                            webResponse.StatusCode == HttpStatusCode.ServiceUnavailable /*503 we have been throttled*/||
+                            (int)webResponse.StatusCode == 999 /*Unable to process request at this time*/)
+                        {
+                            if (callCount < MaxRetries) // don't loop endlessly here, eventually just error out
+                                return GetRawXml (relativeUrl, callCount + 1);
+                            else
+                                throw new Exceptions.DeliciousTimeoutException (String.Format ("The server is not responding.\t{0}", webResponse.StatusCode));
+                        }
+                        else if (webResponse.StatusCode == HttpStatusCode.Unauthorized /*401*/)
+                        {
+                            throw new Exceptions.DeliciousNotAuthorizedException ("Invalid username/password combination");
+                        }
+                        else
+                        {
+                            throw new Exceptions.DeliciousException (webResponse.StatusCode.ToString ());
+                        }
+                    }
+                }
 
-				throw new Exceptions.DeliciousException (e.Status.ToString());
-			}
-			finally
+                throw new Exceptions.DeliciousException (e.Status.ToString ());
+            }
+            catch (IOException e)
+            {
+                // Unable to read data from the transport connection: An existing connection was forcibly closed by the remote host.
+                throw new Exceptions.DeliciousTimeoutException (e.ToString ());
+            }
+            finally
 			{
 				if (response != null)
 					response.Close();
