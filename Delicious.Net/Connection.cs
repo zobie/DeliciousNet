@@ -185,7 +185,13 @@ namespace Delicious
 					return Constants.ApiBaseUrl;
 				return _ApiBaseUrl;
 			}
-			set { _ApiBaseUrl = value; }
+			set
+            {
+                _ApiBaseUrl = value;
+                // a bunch of stuff depeneds on this already having the trailing slash
+                if (!_ApiBaseUrl.EndsWith ("/"))
+                    _ApiBaseUrl += "/";
+            }
 		}
 
 		/// <summary>
