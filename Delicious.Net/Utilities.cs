@@ -40,29 +40,40 @@ namespace Delicious
 {
 	internal static class Utilities
 	{
-		internal static string AddParameter (string baseUrl, string parameter, string value)
-		{
-			// this will get our url's properly formatted
+        internal static string AddParameter (string baseUrl, string parameter, string value)
+        {
+            // this will get our url's properly formatted
             if (parameter == Constants.UrlParameter.Url)
-                    value = new Uri (value).ToString ();
-		    value = HttpUtility.UrlEncode (value);
+            {
+                try
+                {
+                    value = new Uri (value).ToString();
+                }
+                catch (UriFormatException e)
+                {
+                    UriFormatException ufe = new UriFormatException ("Delicious.Net was unable to parse the url \"" + value + "\".\n\n" + e);
+                    throw (ufe);
+                }
+            }
+            value = HttpUtility.UrlEncode (value);
 
-			// insert the '?' if needed
-			int qLocation = baseUrl.LastIndexOf ('?');
-			if (qLocation < 0)
-			{
-				baseUrl += "?";
-				qLocation = baseUrl.Length - 1;
-			}
+            // insert the '?' if needed
+            int qLocation = baseUrl.LastIndexOf ('?');
+            if (qLocation < 0)
+            {
+                baseUrl += "?";
+                qLocation = baseUrl.Length - 1;
+            }
 
-			if (baseUrl.Length > qLocation + 1)
-				baseUrl += "&";
-	
-			baseUrl += parameter + "=" + value;
-			return baseUrl;
-		}
+            if (baseUrl.Length > qLocation + 1)
+                baseUrl += "&";
 
-		internal static DateTime ConvertFromDeliciousTime (string time)
+            baseUrl += parameter + "=" + value;
+            return baseUrl;
+        }
+
+
+	    internal static DateTime ConvertFromDeliciousTime (string time)
 		{
 			return DateTime.Parse (time, DateTimeFormatInfo.CurrentInfo, DateTimeStyles.AdjustToUniversal);
 		}
