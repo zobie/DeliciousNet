@@ -37,6 +37,8 @@
 
 
 using System;
+using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -265,7 +267,14 @@ namespace Delicious
 			if (xmlElement != null)
 			{
 				string time = xmlElement.GetAttribute (Constants.XmlAttribute.Time);
-				lastUpdated = DateTime.Parse (time);
+                try
+                {
+                    lastUpdated = DateTime.Parse (time, CultureInfo.InvariantCulture);
+                }
+                catch (FormatException e)
+                {
+                    Debug.Fail (e.ToString ());
+                }
 			}
 
 			return lastUpdated;
