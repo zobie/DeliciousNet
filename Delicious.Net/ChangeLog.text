@@ -1,3 +1,11 @@
+Version 1.7
+------------------------------------
+Added some debug info to thown exceptions when we can't parse the URL.
+Handle a possible IOException.
+Don't throw an exception when we can't properly parse the date/time returned from del.icio.us.
+When modifying the ApiUrl, make sure we save it with a trailing slash.
+
+
 Version 1.6
 ------------------------------------
 Null check in Connection to prevent a possible null reference exception.
